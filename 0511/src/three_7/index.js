@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import { gui_setup } from './guiBase.js';
 import { adjustment_deviceDisplay } from './three_libraries/renderer_setup.js';
-import { create_camera } from './three_libraries/camera_setup.js';
-import { map } from './three_libraries/map.js';
+import { create_camera, camera_animation } from './three_libraries/camera_setup.js';
 import { drawCircles, paramRotateCircle } from './manFunc.js';
-import { group_parameter } from './parameter.js';
+import { group_parameter, camera_parameter, anime_parameter } from './parameter.js';
 
 const init = () => {
   /* || 初期セットアップ */
@@ -89,6 +88,11 @@ const init = () => {
       }
     });
 
+    // カメラアニメーション
+    // TODO 動いている気がしない
+    camera_animation(camera, camera_parameter, anime_parameter);
+
+    // 画面の更新系
     renderer.render(scene, camera);
     control.update();
   }

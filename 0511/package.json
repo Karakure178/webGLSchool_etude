@@ -1,10 +1,9 @@
 {
-  "name": "vite-p5test",
+  "name": "vite-threeTest",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "author": "Karakure178",
-  "license": "MIT",
   "scripts": {
     "start": "vite",
     "build": "vite build"
