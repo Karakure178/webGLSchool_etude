@@ -3,7 +3,7 @@ import { gui_setup } from './guiBase.js';
 import { adjustment_deviceDisplay } from './three_libraries/renderer_setup.js';
 import { create_camera, camera_animation } from './three_libraries/camera_setup.js';
 import { drawCircles, paramRotateCircle } from './manFunc.js';
-import { group_parameter, camera_parameter, anime_parameter } from './parameter.js';
+import { group_parameter, camera_parameter, cameraRotate_parameter, anime_parameter } from './parameter.js';
 
 const init = () => {
   /* || 初期セットアップ */
@@ -13,7 +13,7 @@ const init = () => {
   adjustment_deviceDisplay(renderer, height);
 
   // カメラの作成
-  const camera = create_camera(scene, -0.5, 1, 4, height);
+  const camera = create_camera(scene, 0, 15, 0, height);
   /* || 初期セットアップ終わり */
 
   /* || メッシュの設定 */
@@ -70,7 +70,10 @@ const init = () => {
   }
   /* || メッシュの設定終わり */
 
-  const control = gui_setup(camera, scene, renderer, groups);
+  const myCamera = new THREE.PerspectiveCamera(75, window.innerWidth / height, 0.1, 10000);
+  const control = gui_setup(myCamera, scene, renderer, groups);
+
+  console.log(camera.rotation.x, camera.rotation.y, camera.rotation.z);
 
   /* || ループ処理設定 */
   let clock = new THREE.Clock();
@@ -90,7 +93,8 @@ const init = () => {
 
     // カメラアニメーション
     // TODO 動いている気がしない
-    camera_animation(camera, camera_parameter, anime_parameter);
+    camera_animation(scene, camera, camera_parameter, cameraRotate_parameter, anime_parameter);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // 画面の更新系
     renderer.render(scene, camera);
