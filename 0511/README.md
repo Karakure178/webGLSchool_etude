@@ -38,3 +38,6 @@ npm start
 - http://localhost:5173/three_4/
 - http://localhost:5173/three_5/
 - http://localhost:5173/three_6/
+- http://localhost:5173/three_7/
+- http://localhost:5173/three_8/
+- http://localhost:5173/three_submit/

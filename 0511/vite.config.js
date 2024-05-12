@@ -22,8 +22,6 @@ for (let i = 0; i < fileNameList.length; i++) {
   */
 }
 
-console.log(inputFiles);
-
 export default defineConfig({
   server: {
     host: true, //IPアドレスを有効化
