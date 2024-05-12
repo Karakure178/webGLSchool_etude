@@ -34,7 +34,7 @@ const init = () => {
   }
   const group = new THREE.Group();
   group.add(...meshs);
-  group.rotation.x = Math.PI / 4;
+  group.rotation.x = Math.PI / 2;
   scene.add(group);
   /* || メッシュの設定終わり */
 
@@ -46,7 +46,7 @@ const init = () => {
     // アニメーション受け取り用シェーダーの値
     //const uniforms = mesh.material.uniforms;
     // frameの受け取り
-    group.rotation.y += clock.getDelta();
+    //group.rotation.y += clock.getDelta();
     //uniforms.time.value += clock.getDelta();
 
     renderer.render(scene, camera);
