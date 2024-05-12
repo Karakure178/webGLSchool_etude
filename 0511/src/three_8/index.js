@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { gui_setup } from './guiBase.js';
 import { adjustment_deviceDisplay } from './three_libraries/renderer_setup.js';
 import { create_camera, camera_animation } from './three_libraries/camera_setup.js';
-import { drawCircles, paramRotateCircle } from './manFunc.js';
-import { group_parameter, camera_parameter, cameraRotate_parameter, anime_parameter } from './parameter.js';
+import { drawCircles, paramRotateCircle, anime } from './manFunc.js';
+import { group_parameter, camera_parameter, anime_parameter } from './parameter.js';
 
 const init = () => {
   /* || 初期セットアップ */
@@ -79,19 +79,10 @@ const init = () => {
     requestAnimationFrame(tick);
     // frameの受け取り
     const time = clock.getDelta();
-    groups.forEach((item) => {
-      if (item.rotate_axis === 'x') {
-        item.group.rotation.x += time;
-      } else if (item.rotate_axis === 'y') {
-        item.group.rotation.y += time;
-      } else {
-        item.group.rotation.z += time;
-      }
-    });
+    anime(groups, time, anime_parameter);
 
     // カメラアニメーション
-    // TODO 動いている気がしない
-    camera_animation(scene, camera, camera_parameter, cameraRotate_parameter, anime_parameter);
+    camera_animation(scene, camera, camera_parameter, anime_parameter);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // 画面の更新系

@@ -56,36 +56,29 @@ export const camera_parameter = [
     z: 0,
   },
   {
+    x: -5,
+    y: 0,
+    z: 10,
+  },
+  {
     x: 0,
-    y: 15,
-    z: 0,
+    y: 0,
+    z: 10,
+  },
+  {
+    x: 5,
+    y: 0,
+    z: 10,
   },
   {
     x: -5,
     y: 0,
-    z: 1,
-  },
-];
-
-/**
- * @type {Array}
- * @description カメラを動かすためのパラメータ群,アニメーションのtimelineより1個多い（初期地点があるため）
- */
-export const cameraRotate_parameter = [
-  {
-    x: -1.569396888573175,
-    y: -0.006997074632404589,
-    z: -1.3733958709374008,
+    z: 10,
   },
   {
-    x: -1.569396888573175,
-    y: -0.006997074632404589,
-    z: -1.3733958709374008,
-  },
-  {
-    x: -1.569396888573175,
-    y: -0.006997074632404589,
-    z: -1.3733958709374008,
+    x: 0,
+    y: 5,
+    z: 0,
   },
 ];
 
@@ -110,9 +103,37 @@ export const anime_parameter = [
     isActive: true,
     isStart: false,
     isEnd: false,
-    time: 2,
+    time: 3,
     count: 0,
+    delay: 0,
     easing: 'linear',
+  },
+  {
+    isActive: false,
+    isStart: false,
+    isEnd: false,
+    time: 1,
+    count: 0,
+    delay: 0.2,
+    easing: 'power1.inOut',
+  },
+  {
+    isActive: false,
+    isStart: false,
+    isEnd: false,
+    time: 1,
+    count: 0,
+    delay: 0,
+    easing: 'power1.inOut',
+  },
+  {
+    isActive: false,
+    isStart: false,
+    isEnd: false,
+    time: 1,
+    count: 0,
+    delay: 0,
+    easing: 'power1.inOut',
   },
   {
     isActive: false,
@@ -120,6 +141,7 @@ export const anime_parameter = [
     isEnd: false,
     time: 3,
     count: 0,
+    delay: 0.2,
     easing: 'power1.inOut',
   },
 ];
