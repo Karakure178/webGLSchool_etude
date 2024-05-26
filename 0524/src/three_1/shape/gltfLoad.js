@@ -16,15 +16,16 @@ export const gltfLoad = (path, scene, material) => {
     path,
     function (gltf) {
       //   scene.add(gltf.scene.children[4]);
+      console.log(gltf.scene);
       // ジオメトリの定義
       const geometry_blade = gltf.scene.children[0].geometry;
       const geometry_net_back = gltf.scene.children[1];
 
-      //console.log(geometry_net_back);
-      const net_back1 = new THREE.Mesh(geometry_net_back.children[0].geometry, material);
-      const net_back2 = new THREE.Mesh(geometry_net_back.children[1].geometry, material);
-      const net_back3 = new THREE.Mesh(geometry_net_back.children[2].geometry, material);
-      const net_back = new THREE.Group().add(net_back1);
+      console.log(geometry_net_back);
+      //const net_back1 = new THREE.Mesh(geometry_net_back.children[0].geometry, material);
+      //const net_back2 = new THREE.Mesh(geometry_net_back.children[1].geometry, material);
+      //const net_back3 = new THREE.Mesh(geometry_net_back.children[2].geometry, material);
+      //const net_back = new THREE.Group().add(net_back1);
 
       const geometry_net_front = gltf.scene.children[2].geometry;
       const geometry_prop = gltf.scene.children[3].geometry;
@@ -38,7 +39,7 @@ export const gltfLoad = (path, scene, material) => {
       const handle = new THREE.Mesh(geometry_handle, material);
 
       scene.add(blade);
-      scene.add(net_back);
+      //scene.add(net_back);
       //scene.add(net_front);
       //scene.add(prop);
       //scene.add(handle);
@@ -57,6 +58,28 @@ export const gltfLoad = (path, scene, material) => {
       console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
     },
 
+    // called when loading has errors
+    function (error) {
+      console.log('An error happened');
+    }
+  );
+};
+
+export const gltfLoad_back = (path, scene, material) => {
+  const loader = new GLTFLoader();
+
+  loader.load(
+    path,
+    function (gltf) {
+      //
+      const net_back = gltf.scene.children[0];
+      scene.add(net_back);
+      console.log(gltf.scene.children[0]);
+    },
+
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded!!');
+    },
     // called when loading has errors
     function (error) {
       console.log('An error happened');

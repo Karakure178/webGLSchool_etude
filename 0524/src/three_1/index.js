@@ -4,7 +4,7 @@ import { adjustment_deviceDisplay } from './three_libraries/renderer_setup.js';
 import { create_camera } from './three_libraries/camera_setup.js';
 import { map } from './three_libraries/map.js';
 import { radians } from './three_libraries/radians.js';
-import { gltfLoad } from './shape/gltfLoad.js';
+import { gltfLoad, gltfLoad_back } from './shape/gltfLoad.js';
 
 const init = () => {
   /* || 初期セットアップ */
@@ -23,7 +23,10 @@ const init = () => {
   const geometry = new THREE.BoxGeometry(1, 1, 1); // ジオメトリ設定
   const fan_path =
     'https://raw.githubusercontent.com/Karakure178/webGLSchool_etude/main/0524/public/assets/image/fan_boolean.gltf';
+  const fan_path2 =
+    'https://raw.githubusercontent.com/Karakure178/webGLSchool_etude/main/0524/public/assets/image/fan_boolean_back.gltf';
   gltfLoad(fan_path, scene, material);
+  gltfLoad_back(fan_path2, scene, material);
 
   /* || メッシュの設定終わり */
 
