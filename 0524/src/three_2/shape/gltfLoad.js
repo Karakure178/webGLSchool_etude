@@ -40,24 +40,10 @@ export const gltfLoad = (path, scene, material, meshLoad_frag) => {
       head.add(net_back);
       head.add(net_front);
 
-      // 原点をずらすための重み付け
-      const inversion_net_back = net_back.clone();
-      const inversion_net_front = net_front.clone();
-      inversion_net_back.rotation.y = Math.PI;
-      inversion_net_back.position.x = -3.03;
-      inversion_net_front.rotation.y = Math.PI;
-      inversion_net_front.position.x = -3.75;
-      console.log(head.worldToLocal(new THREE.Vector3(10, 0, 0)), 'hello');
-      const target = new THREE.Vector3(0, 0, 0);
-
-      const target_local = prop.getWorldPosition(target);
+      // ここ(扇風機の支柱・ようはprops)を中心点として扇風機を回転させてる
+      // const target = new THREE.Vector3(0, 0, 0);
+      // const target_local = prop.getWorldPosition(target);
       // console.log(target_local, 'hello');
-      //head.add(inversion_net_back);
-      //head.add(inversion_net_front);
-
-      //scene.add(blade);
-      //scene.add(net_back);
-      //scene.add(net_front);
 
       scene.add(head);
       scene.add(prop);

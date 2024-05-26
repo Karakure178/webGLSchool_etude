@@ -43,9 +43,8 @@ const init = () => {
 
     // メッシュが読み込まれたら実行
     if (meshLoad_frag.bool) {
-      scene.children[1].rotation.y += radians(3);
+      rotateAroundAxis(scene.children[1]);
       scene.children[1].children[0].rotation.x += radians(30);
-      //console.log(scene.children[1].children[0]);
     }
 
     renderer.render(scene, camera);
@@ -57,3 +56,42 @@ const init = () => {
 window.addEventListener('DOMContentLoaded', () => {
   init();
 });
+
+/**
+ * // 実装参考：https://jsfiddle.net/felixmariotto/mgf6ebah/
+ */
+THREE.Object3D.prototype.rotateAroundWorldAxis = (function () {
+  // rotate object around axis in world space (the axis passes through point)
+  // axis is assumed to be normalized
+  // assumes object does not have a rotated parent
+
+  var q = new THREE.Quaternion();
+
+  return function rotateAroundWorldAxis(point, axis, angle) {
+    q.setFromAxisAngle(axis, angle);
+
+    this.applyQuaternion(q);
+
+    this.position.sub(point);
+    this.position.applyQuaternion(q);
+    this.position.add(point);
+
+    return this;
+  };
+})();
+
+const rotateAroundAxis = (mesh) => {
+  if (!mesh) return;
+  const points = [];
+  // 支柱の中心点二つ
+  points.push(new THREE.Vector3(-1.8885620832443237, -4.280918121337891, 0));
+  points.push(new THREE.Vector3(-1.8885620832443237, 4.280918121337891, 0));
+
+  const vecA = points[0];
+  const vecB = points[1];
+  const vec = new THREE.Vector3();
+
+  vec.copy(vecA).sub(vecB).normalize();
+
+  mesh.rotateAroundWorldAxis(vecA, vec, 0.1);
+};
