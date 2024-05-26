@@ -26,8 +26,10 @@ const init = () => {
   const fan_path2 =
     'https://raw.githubusercontent.com/Karakure178/webGLSchool_etude/main/0524/public/assets/image/fan_boolean_back.gltf';
   gltfLoad(fan_path, scene, material);
-  gltfLoad_back(fan_path2, scene, material);
+  //gltfLoad_back(fan_path2, scene, material);
 
+  // https://observablehq.com/@kabokawakabo1/three-js-4-2
+  //scene.overrideMaterial = new THREE.MeshNormalMaterial();
   /* || メッシュの設定終わり */
 
   let clock = new THREE.Clock();

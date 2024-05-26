@@ -15,34 +15,47 @@ export const gltfLoad = (path, scene, material) => {
   loader.load(
     path,
     function (gltf) {
-      //   scene.add(gltf.scene.children[4]);
-      console.log(gltf.scene);
-      // ジオメトリの定義
-      const geometry_blade = gltf.scene.children[0].geometry;
-      const geometry_net_back = gltf.scene.children[1];
+      // scene.add(gltf.scene.children[4]);
+      // console.log(gltf.scene);
 
-      console.log(geometry_net_back);
-      //const net_back1 = new THREE.Mesh(geometry_net_back.children[0].geometry, material);
-      //const net_back2 = new THREE.Mesh(geometry_net_back.children[1].geometry, material);
-      //const net_back3 = new THREE.Mesh(geometry_net_back.children[2].geometry, material);
-      //const net_back = new THREE.Group().add(net_back1);
+      // ジオメトリの定義(うまくいかなかった)
+      // const geometry_blade = gltf.scene.children[0].geometry;
+      // const geometry_net_back = gltf.scene.children[1];
+      // const net_back1 = new THREE.Mesh(geometry_net_back.children[0].geometry, material);
+      // const net_back2 = new THREE.Mesh(geometry_net_back.children[1].geometry, material);
+      // const net_back3 = new THREE.Mesh(geometry_net_back.children[2].geometry, material);
+      // const net_back = new THREE.Group().add(net_back1);
 
-      const geometry_net_front = gltf.scene.children[2].geometry;
-      const geometry_prop = gltf.scene.children[3].geometry;
-      const geometry_handle = gltf.scene.children[4].geometry;
+      // const geometry_net_front = gltf.scene.children[2].geometry;
+      // const geometry_prop = gltf.scene.children[3].geometry;
+      // const geometry_handle = gltf.scene.children[4].geometry;
 
       // メッシュの定義
-      const blade = new THREE.Mesh(geometry_blade, material);
-      //   const net_back = new THREE.Mesh(geometry_net_back, material);
-      const net_front = new THREE.Mesh(geometry_net_front, material);
-      const prop = new THREE.Mesh(geometry_prop, material);
-      const handle = new THREE.Mesh(geometry_handle, material);
+      const blade = gltf.scene.children[0]; // new THREE.Mesh(geometry_blade, material);(個別に設定するとサイズ感も狂う)
+      const net_back = gltf.scene.children[1];
+      const net_front = gltf.scene.children[2];
+      const prop = gltf.scene.children[3];
+      const handle = gltf.scene.children[4];
+      blade.material = material; // 上書きできる
+
+      for (let i = 0; i < net_back.children.length; i++) {
+        net_back.children[i].material = material;
+      }
+
+      //   console.log(net_back, 'hello');
+      //   console.log(net_front, 'hello');
+      for (let i = 0; i < net_front.children.length; i++) {
+        net_front.children[i].material = material;
+      }
+
+      prop.material = material;
+      handle.material = material;
 
       scene.add(blade);
-      //scene.add(net_back);
-      //scene.add(net_front);
-      //scene.add(prop);
-      //scene.add(handle);
+      scene.add(net_back);
+      scene.add(net_front);
+      scene.add(prop);
+      scene.add(handle);
 
       // console.log(gltf.scene);
 
@@ -73,8 +86,8 @@ export const gltfLoad_back = (path, scene, material) => {
     function (gltf) {
       //
       const net_back = gltf.scene.children[0];
+      console.log(net_back, 'hello');
       scene.add(net_back);
-      console.log(gltf.scene.children[0]);
     },
 
     function (xhr) {
