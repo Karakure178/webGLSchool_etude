@@ -21,8 +21,9 @@ const init = () => {
   /* || メッシュの設定 */
   const material = new THREE.MeshNormalMaterial(); // マテリアル設定
   const geometry = new THREE.BoxGeometry(1, 1, 1); // ジオメトリ設定
-  const fan_path = '/assets/image/fan_boolean.glb';
-  gltfLoad(fan_path, scene);
+  const fan_path =
+    'https://raw.githubusercontent.com/Karakure178/webGLSchool_etude/main/0524/public/assets/image/fan_boolean.gltf';
+  gltfLoad(fan_path, scene, material);
 
   /* || メッシュの設定終わり */
 
