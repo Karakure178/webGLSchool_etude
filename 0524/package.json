@@ -1,0 +1,24 @@
+{
+  "name": "vite-threeTest",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "author": "Karakure178",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1",
+    "vite": "^5.0.8",
+    "vite-plugin-glsl": "^1.2.1",
+    "vite-plugin-live-reload": "^3.0.2"
+  },
+  "dependencies": {
+    "gsap": "^3.12.2",
+    "lil-gui": "^0.19.2",
+    "three": "^0.164.1"
+  }
+}
