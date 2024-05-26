@@ -47,8 +47,13 @@ export const gltfLoad = (path, scene, material, meshLoad_frag) => {
       inversion_net_back.position.x = -3.03;
       inversion_net_front.rotation.y = Math.PI;
       inversion_net_front.position.x = -3.75;
-      head.add(inversion_net_back);
-      head.add(inversion_net_front);
+      console.log(head.worldToLocal(new THREE.Vector3(10, 0, 0)), 'hello');
+      const target = new THREE.Vector3(0, 0, 0);
+
+      const target_local = prop.getWorldPosition(target);
+      // console.log(target_local, 'hello');
+      //head.add(inversion_net_back);
+      //head.add(inversion_net_front);
 
       //scene.add(blade);
       //scene.add(net_back);
