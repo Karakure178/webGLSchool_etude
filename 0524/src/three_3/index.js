@@ -118,6 +118,31 @@ const gsapSetup = (frame) => {
 };
 
 /**
+ * layerをセットする関数
+ * @param {*} object
+ * @see https://threejs.org/docs/#api/en/core/Object3D.getObjectByName
+ * @see https://zenn.dev/dami/articles/5d9792736a4ffc
+ */
+const layerSet = (object) => {
+  // 以下はAIが提示したMeshを全文探索するコード(効率悪そう)
+  function assignLayerToOneRecursively(object) {
+    if (object instanceof THREE.Mesh) {
+      object.layers.set(1); // Meshの場合はlayerを設定
+    }
+
+    if (object.children && object.children.length > 0) {
+      object.children.forEach(function (child) {
+        assignLayerToOneRecursively(child); // 子供たちに再帰的に適用
+      });
+    }
+  }
+
+  // 使用例
+  const group = new THREE.Group();
+  // グループにMeshを追加するなどの操作...
+  assignLayerToOneRecursively(group); // グループ内のすべてのMeshにlayer 1を割り当てる
+};
+/**
  * // 実装参考：https://jsfiddle.net/felixmariotto/mgf6ebah/
  */
 THREE.Object3D.prototype.rotateAroundWorldAxis = (function () {
