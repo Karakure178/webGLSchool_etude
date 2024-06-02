@@ -1,24 +1,40 @@
 import * as THREE from 'three';
-import { gui_setup } from './guiBase.js';
 import { adjustment_deviceDisplay } from './three_libraries/renderer_setup.js';
 import { create_camera } from './three_libraries/camera_setup.js';
 import { map } from './three_libraries/map.js';
 import { radians } from './three_libraries/radians.js';
 import { gltfLoad, gltfLoad_group } from './shape/gltfLoad.js';
-import { gsap } from 'gsap';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { WarpShader } from './shader/fragment.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { gsap } from 'gsap';
+
+// 画像の読み込み:https://ics.media/entry/210708/#javascript%2Ftypescript%E3%81%8B%E3%82%89%E7%94%BB%E5%83%8F%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80
+import imgUrl from './threeTone.jpg'; // フォルダ内の画像であれば呼び出せる.. なぜ？
 
 const meshLoad_frag = { bool: false };
 const meshLoad_fragGroup = { bool: false };
-// TODO num分マテリアルをランダム&スケール保存&頭吹き飛ばすかどうかを保存するオブジェクトを作成する
+let isLight = false;
+const colorBox = [0x01204e, 0x028391, 0xf97300, 0xfeae6f];
+
 const num = 10;
 const num_setting = { materials: [], scales: [], blowHead: [], frame: [] };
+const textureLoader = new THREE.TextureLoader();
+const threeTone = textureLoader.load(imgUrl);
+threeTone.minFilter = THREE.NearestFilter;
+threeTone.magFilter = THREE.NearestFilter;
+
 for (let i = 0; i < num; i++) {
-  num_setting.materials.push(new THREE.MeshNormalMaterial()); // マテリアル
+  const color = new THREE.Color(colorBox[Math.floor(Math.random() * colorBox.length)]);
+
+  // toneMaterialの設定
+  const material = new THREE.MeshToonMaterial({
+    color: color,
+    gradientMap: threeTone,
+  });
+  num_setting.materials.push(material); // マテリアル
   num_setting.scales.push(Math.random() * 0.5 + 0.5); // スケール
   num_setting.blowHead.push(Math.random() > 0.5 ? true : false); // 頭を飛ばすか否か
   num_setting.frame.push({ count: 0 }); // アニメーションフレーム
@@ -34,7 +50,8 @@ const init = () => {
 
   // カメラの作成
   const camera = create_camera(scene, -0.5, 1, 4, height);
-  const control = gui_setup(camera, scene, renderer);
+  world_setup(scene);
+  const controls = new OrbitControls(camera, renderer.domElement);
 
   // resize処理の追加
   window.addEventListener(
@@ -50,6 +67,7 @@ const init = () => {
     },
     false
   );
+
   /* || 初期セットアップ終わり */
 
   // エフェクト設定
@@ -64,7 +82,7 @@ const init = () => {
   const fan_path =
     'https://raw.githubusercontent.com/Karakure178/webGLSchool_etude/main/0524/public/assets/image/senpuki_boolean.gltf';
   gltfLoad(fan_path, scene, material, meshLoad_frag);
-  gltfLoad_group(fan_path, scene, material, meshLoad_fragGroup, 10, 10, mesh_group);
+  gltfLoad_group(fan_path, scene, num_setting.materials, meshLoad_fragGroup, 10, 10, mesh_group);
 
   // 非同期でメッシュが読み込まれたらスケールを変更する
   new Promise((resolve) => {
@@ -83,16 +101,11 @@ const init = () => {
       }
     }, 1000);
   });
-
   /* || メッシュの設定終わり */
 
   let clock = new THREE.Clock();
   function tick() {
     requestAnimationFrame(tick);
-
-    // frameの受け取り
-    //group.rotation.y += clock.getDelta();
-    //uniforms.time.value += clock.getDelta();
 
     // アニメーション受け取り用シェーダーの値
     const uniforms = shaderPass.material.uniforms;
@@ -100,6 +113,24 @@ const init = () => {
 
     // メッシュが読み込まれたら実行
     if (meshLoad_frag.bool) {
+      if (!isLight) {
+        isLight = true;
+        // ライトの設定
+        const ambientLight = new THREE.AmbientLight(0xc1c1c1, 1);
+        scene.add(ambientLight);
+
+        const light1 = new THREE.DirectionalLight(0xffffff, 3);
+        light1.position.set(0, 3, 5);
+        scene.add(light1);
+
+        const light2 = new THREE.DirectionalLight(0xffffff, 3);
+        light2.position.set(10, 20, 10);
+        scene.add(light2);
+
+        const light3 = new THREE.DirectionalLight(0xffffff, 3);
+        light3.position.set(-10, -20, -10);
+        scene.add(light3);
+      }
       rotateAroundAxis(scene.children[1]);
       scene.children[1].children[0].rotation.x += radians(30);
     }
@@ -121,31 +152,28 @@ const init = () => {
       });
     }
 
-    //    renderer.render(scene, camera);
     composer.render();
-
-    control.update();
+    controls.update();
   }
   tick();
-};
-
-const onResize = (renderer, camera) => {
-  // サイズを取得
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  // レンダラーのサイズを調整する
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
-
-  // カメラのアスペクト比を正す
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
 };
 
 window.addEventListener('DOMContentLoaded', () => {
   init();
 });
+
+//world目安の床を生成する関数
+const world_setup = (scene) => {
+  const world_floorGeo = new THREE.PlaneGeometry(1000, 1000, 50, 50);
+  const world_floorMat = new THREE.MeshBasicMaterial({
+    color: 0x333333,
+    wireframe: true,
+  });
+  const world_floor = new THREE.Mesh(world_floorGeo, world_floorMat);
+  world_floor.rotation.set(-Math.PI / 2, 0, 0);
+  scene.add(world_floor);
+  return world_floor;
+};
 
 /**
  * gsapの初期設定をする
@@ -164,31 +192,6 @@ const gsapSetup = (frame) => {
   });
 };
 
-/**
- * layerをセットする関数
- * @param {*} object
- * @see https://threejs.org/docs/#api/en/core/Object3D.getObjectByName
- * @see https://zenn.dev/dami/articles/5d9792736a4ffc
- */
-const layerSet = (object) => {
-  // 以下はAIが提示したMeshを全文探索するコード(効率悪そう)
-  function assignLayerToOneRecursively(object) {
-    if (object instanceof THREE.Mesh) {
-      object.layers.set(1); // Meshの場合はlayerを設定
-    }
-
-    if (object.children && object.children.length > 0) {
-      object.children.forEach(function (child) {
-        assignLayerToOneRecursively(child); // 子供たちに再帰的に適用
-      });
-    }
-  }
-
-  // 使用例
-  const group = new THREE.Group();
-  // グループにMeshを追加するなどの操作...
-  assignLayerToOneRecursively(group); // グループ内のすべてのMeshにlayer 1を割り当てる
-};
 /**
  * // 実装参考：https://jsfiddle.net/felixmariotto/mgf6ebah/
  */
